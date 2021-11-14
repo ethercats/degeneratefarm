@@ -1,0 +1,17 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Steps for backend:",
+  "main": "src/handlers/EventHandler.js",
+  "scripts": {
+    "run-local": "node -r dotenv/config src/server.js dotenv_config_path=.env.local",
+    "run-testnet": "node -r dotenv/config src/server.js dotenv_config_path=.env.testnet",
+    "run-mainnet": "node -r dotenv/config src/server.js dotenv_config_path=.env.mainnet"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@alch/alchemy-web3": "^1.1.7",
+    "dotenv": "^10.0.0"
+  }
+}
