@@ -46,10 +46,11 @@ const processEvent = async (event) => {
     const filePath = getHTMLPath(tokenId);
 
     await writeFileAsync(filePath, HTMLTemplate);
+    console.log(event.returnValues[2] + ".html has been saved.");
 }
 
 const getHTMLPath = (tokenId) => {
-    return path.resolve(__dirname, '..', '..', '..', 'public', 'nfts', 'pigs', `${tokenId}.html`)
+    return path.resolve(__dirname, '..', '..', '..', 'www', 'www', 'nfts', 'pigs', `${tokenId}.html`)
 }
 
 module.exports = {
