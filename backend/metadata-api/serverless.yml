@@ -1,0 +1,20 @@
+service: metadata
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  stage: dev
+  region: eu-central-1
+
+  httpApi:
+    cors: true
+
+functions:
+  metadata:
+    handler: handler.getTokenMetadata
+    events:
+      - httpApi:
+          path: /metadata/{tokenId}
+          method: get

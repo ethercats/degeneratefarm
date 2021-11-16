@@ -464,8 +464,8 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
     bool public permanentlyStop;
     bool public upgradeable;
     bool public permanentlyStopUpgrades;
-    
-    struct tokenHistory{
+
+    struct tokenHistory {
         uint256 chipStack;
         uint256 plaqueStack;
         uint256 totalAces;
@@ -474,8 +474,9 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         uint256 lastLeftCard;
         uint256 lastRightCard;
     }
-    
-    //upgrade event
+
+    //Track the hands for statistical analysis or frontend purposes.
+    event HandDealt(uint256 indexed tokenID, uint256 leftCard, uint256 rightCard, bool isMint);
 
     mapping(bytes32 => address) internal minterAddress;
     mapping(bytes32 => uint256) internal tokenToUpgrade;
@@ -503,11 +504,13 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         baseURI = "https://wwww.degeneratefarm.io/";
     }
 
+    //Reduces require() statements that would increase verbosity.
     modifier onlyOwner() {
         require(msg.sender == contractOwner);
         _;
     }
 
+    //We need separate mappings for mints and upgrades to differentiate them in the fulfillRandomness function.
     function getRandomNumberForMint() internal returns(bytes32 requestId) {
         require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK. Topup the contract with LINK.");
         requestId = requestRandomness(keyHash, fee);
@@ -515,6 +518,7 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         return requestId;
     }
 
+    //We need separate mappings for mints and upgrades to differentiate them in the fulfillRandomness function.
     function getRandomNumberForUpgrade(uint256 tokenID) internal returns(bytes32 requestId) {
         require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK. Topup the contract with LINK.");
         requestId = requestRandomness(keyHash, fee);
@@ -522,6 +526,7 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         return requestId;
     }
 
+    //The VRF Coordinator only calls the function named fulfillRandomness. It doesn't know whether it is providing a random number for a mint or an upgrade. The contract must interpret this from the requestID by checking which mapping it is a part of.
     function fulfillRandomness(bytes32 requestId, uint256 randomNumber) internal override {
         require(msg.sender == vrfCoordinator, "Only the VRF Coordinator may call this function.");
         if (tokenToUpgrade[requestId] != 0) {
@@ -531,10 +536,12 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         }
     }
 
+    //While the mint function starts here, it is the VRF Coordinator who actually mints the NFTs.
     function mint() external payable nonReentrant {
         require(permanentlyStop == false, "Minting has been permanently disabled.");
         require(forSale == true, "Minting has been paused.");
         if (msg.value == price) {
+            //If the correct amount is sent, then request a VRF number.
             getRandomNumberForMint();
             (bool mintPaymentSent, ) = payable(receiverAccount).call { value: msg.value }("");
             require(mintPaymentSent, "Failed to send Ether for minting.");
@@ -547,12 +554,12 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
     function totalSupply() public view returns(uint256) {
         return totalNFTs;
     }
-    
+
     //Returns all the mapping data in one call.
     function getUpgrades(uint256 tokenID) public view returns(uint256, uint256, uint256, uint256, uint256, uint256, uint256) {
-        return (chipStack[tokenID],  plaqueStack[tokenID],  totalAces[tokenID],  matchingAces[tokenID],  diamondAces[tokenID],  lastLeftCard[tokenID],  lastRightCard[tokenID]);
+        return (chipStack[tokenID], plaqueStack[tokenID], totalAces[tokenID], matchingAces[tokenID], diamondAces[tokenID], lastLeftCard[tokenID], lastRightCard[tokenID]);
     }
-    
+
     //This is a lookup table to make the background rarity non-linear.
     function backgroundLookup(uint256 index) internal pure returns(uint256 backgroundNumber) {
         if (index <= 40) return 0;
@@ -567,16 +574,25 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         else if (index == 99) return 9;
     }
 
-    function mintPig(address minter, uint256 randomNumberFromChainlink) public {//internal
+    //Called from fulfillRandomness.
+    function mintPig(address minter, uint256 randomNumberFromChainlink) internal { //Change to public for Remix testing. You can directly input numbers this way.
+        //Increment the total of minted NFTs. This is used for tracking the chronological order, and compatibility with existing ERC721 patterns.
         totalNFTs++;
+        //The backgrounds are a non-linear feature of the pig. It is a 1 in 100 chance to get the rarest Level 10 background. It returns only a single digit for purposes of sprite mapping.
         uint256 background = backgroundLookup(randomNumberFromChainlink % 10 ** 11 / 10 ** 9);
+        //The token ID is made up of the chronological number that is prepended, the background number, and a straight crop of the last 9 numbers of the VRF returned random number. Each of these number represents a sprite.
         uint256 tokenID = ((totalNFTs * 10 ** 10) + (background * 10 ** 9)) + randomNumberFromChainlink % 10 ** 9;
+        //Mint the pig.
         _mint(minter, tokenID);
+        //Take the chronological number of each pig and use it as a key to find the full token ID. This is useful for Web3 operations.
         lookupFullTokenID[totalNFTs] = tokenID;
+        //Crop out six digit pieces of the returned VRF number. This in effect makes a 1 million card shoe for each card and renders modulo bias moot.
         uint256 leftCard = (((randomNumberFromChainlink % 10 ** 22 / 10 ** 16) + 52) % 52) + 1000000;
         uint256 rightCard = (((randomNumberFromChainlink % 10 ** 16 / 10 ** 10) + 52) % 52) + 1000000;
+        //This saves the cards to a mapping so the lookup function can fetch the last cards dealt for display on the pig.
         lastLeftCard[tokenID] = leftCard;
         lastRightCard[tokenID] = rightCard;
+        //Initialize the chip stack with a single 1000 chip.
         chipStack[tokenID] = 1;
         //If there first hand dealt is aces, add it to the total.
         if ((leftCard == 1 || leftCard == 14 || leftCard == 27 || leftCard == 40) && (rightCard == 1 || rightCard == 14 || rightCard == 27 || rightCard == 40)) {
@@ -592,14 +608,22 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
                 }
             }
         }
+
+        //It's a mint, but also deals a hand. We track this for frontend purposes.
         totalHandsDealt++;
+        //It's also considered an upgrade since the hand and chip added goes to upgrade totals.
         upgradeCount[tokenID] += 1;
-        lookupTokenHistory[tokenID].push(tokenHistory(chipStack[tokenID],  plaqueStack[tokenID],  totalAces[tokenID],  matchingAces[tokenID],  diamondAces[tokenID],  lastLeftCard[tokenID],  lastRightCard[tokenID]));
+        //We save the current state of the pig to a mapping that the NFT uses to render the real time status with a single Web3 call to the blockchain.
+        lookupTokenHistory[tokenID].push(tokenHistory(chipStack[tokenID], plaqueStack[tokenID], totalAces[tokenID], matchingAces[tokenID], diamondAces[tokenID], lastLeftCard[tokenID], lastRightCard[tokenID]));
+        //isMint is true because this is a mint event.
+        emit HandDealt(tokenID, leftCard, rightCard, true);
     }
 
+    //While the upgrade function starts here, it is the VRF Coordinator who actually mints the NFTs.
     function upgrade(uint256 tokenID) external payable {
         require(msg.sender == ownerOf(tokenID));
         if (msg.value == upgradePrice) {
+            //If the correct amount is sent, then request a VRF number.
             getRandomNumberForUpgrade(tokenID);
             (bool upgradePaymentSent, ) = payable(receiverAccount).call { value: msg.value }("");
             require(upgradePaymentSent, "Failed to send Ether for upgrade.");
@@ -608,15 +632,19 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         }
     }
 
-    function upgradePig(uint256 tokenID, uint256 randomNumberFromChainlink) public {//internal
+    //Called from fulfillRandomness.
+    function upgradePig(uint256 tokenID, uint256 randomNumberFromChainlink) internal { //Change to public for Remix testing. You can directly input numbers this way.
+        //The maximum number of chips is 200. If there are already 200 chips, then this is ignored, and only new plaques can be earned.
         if (chipStack[tokenID] < 200) {
             chipStack[tokenID] += 1;
         }
+        //Crop out six digit pieces of the returned VRF number. This in effect makes a 1 million card shoe for each card and renders modulo bias moot.
         uint256 leftCard = (((randomNumberFromChainlink % 10 ** 12 / 10 ** 6) + 52) % 52) + 1;
-        uint256 rightCard =  (((randomNumberFromChainlink % 10 ** 6) + 52) % 52) + 1;
+        uint256 rightCard = (((randomNumberFromChainlink % 10 ** 6) + 52) % 52) + 1;
+        //This saves the cards to a mapping so the lookup function can fetch the last cards dealt for display on the pig.
         lastLeftCard[tokenID] = leftCard;
         lastRightCard[tokenID] = rightCard;
-
+        //Evaluate the hand to check if it is aces, and then what type of aces.
         if (plaqueStack[tokenID] < 3) {
             if ((leftCard == 1 || leftCard == 14 || leftCard == 27 || leftCard == 40) && (rightCard == 1 || rightCard == 14 || rightCard == 27 || rightCard == 40)) {
                 totalAces[tokenID] += 1;
@@ -653,20 +681,25 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
                     matchingAces[tokenID] += 1;
                     //If they are matching aces, then check to see if they are matching diamond aces.
                     if (leftCard == 14 && rightCard == 14) {
-                        if (plaqueStack[tokenID] < 10){
-                        //Add a plaque
-                        plaqueStack[tokenID] += 1;
+                        if (plaqueStack[tokenID] < 10) {
+                            //Add a plaque
+                            plaqueStack[tokenID] += 1;
                         }
                         diamondAces[tokenID] += 1;
                     }
                 }
             }
         }
+
+        //Add to the total hands dealt total.
         totalHandsDealt++;
+        //Add to the total upgrades of the pig. This can exceed the cap on chips, so we need to save for statistical purposes.
         upgradeCount[tokenID] += 1;
-        lookupTokenHistory[tokenID].push(tokenHistory(chipStack[tokenID],  plaqueStack[tokenID],  totalAces[tokenID],  matchingAces[tokenID],  diamondAces[tokenID],  lastLeftCard[tokenID],  lastRightCard[tokenID]));
+        lookupTokenHistory[tokenID].push(tokenHistory(chipStack[tokenID], plaqueStack[tokenID], totalAces[tokenID], matchingAces[tokenID], diamondAces[tokenID], lastLeftCard[tokenID], lastRightCard[tokenID]));
+        //isMint is false because this is an upgrade event.
+        emit HandDealt(tokenID, leftCard, rightCard, false);
     }
-    
+
     //Start or pause the minting functionality in the contract.
     function changeSaleState() external onlyOwner {
         forSale = !forSale;
@@ -676,9 +709,9 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
     function permanentlyStopMinting() external onlyOwner {
         require(forSale == false, "You must switch off mints before permanently disabling them manually.");
         require(permanentlyStop == false, "Minting has already been permanently disabled.");
-            permanentlyStop = true;
+        permanentlyStop = true;
     }
-    
+
     //Start or pause the upgrade functionality in the contract.
     function changeUpgradeState() external onlyOwner {
         upgradeable = !upgradeable;
@@ -688,14 +721,14 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
     function permanentlyStopUpgrading() external onlyOwner {
         require(upgradeable == false, "You must switch off upgrades before permanently disabling them manually.");
         require(permanentlyStopUpgrades == false, "Upgrading has already been permanently disabled.");
-            permanentlyStopUpgrades = true;
+        permanentlyStopUpgrades = true;
     }
-    
+
     //Change the price of upgrading.
     function changeUpgradePrice(uint256 newUpgradePrice) external onlyOwner {
         upgradePrice = newUpgradePrice;
     }
-    
+
     //Change the price of minting.
     function changePrice(uint256 newPrice) external onlyOwner {
         price = newPrice;
@@ -705,36 +738,39 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
     function changeReceivingAccount(address payable newReceivingAddress) external onlyOwner {
         receiverAccount = newReceivingAddress;
     }
-    
+
     //Change the owner of the contract.
     function changeContractOwner(address payable newcontractOwner) external onlyOwner {
         contractOwner = newcontractOwner;
     }
-    
+
+    //Get the total stack of a particular pig.
     function totalStack(uint256 tokenID) external view returns(uint256) {
         uint256 totalChipStack = chipLookup(chipStack[tokenID]) + plaqueLookup(plaqueStack[tokenID]);
         return totalChipStack;
     }
-    
+
+    //Calculates the total chip stack exclusive of plaques.
     function chipLookup(uint256 chips) internal pure returns(uint256) {
         if (chips <= 100) return 1000 * chips;
         else if (chips >= 101) return (5000 * (chips - 100)) + 100000;
         else return 0;
     }
-    
+
+    //Calculates the total plaque stack exclusive of chips.
     function plaqueLookup(uint256 plaques) internal pure returns(uint256) {
         if (plaques > 0) return 25000 * plaques;
         else return 0;
     }
 
-    //This function allows the metadata to be updated, and the location of it to be changed.
+    //This function allows the metadata to be updated, and the location of it to be changed to decentralized file services after minting.
     function _setTokenUri(string memory newuri) public onlyOwner {
         baseURI = newuri;
     }
-    
-    //Withdraw all of the LINK from the contract.
+
+    //Withdraw all of the LINK from the contract. Probably not necessary since we know the total amount of pigs that can be minted, but you never know.
     function withdrawLink() external onlyOwner {
-    LinkTokenInterface link = LinkTokenInterface(linkTokenAddress);
-    require(link.transfer(receiverAccount, link.balanceOf(address(this))), "Unable to transfer");
+        LinkTokenInterface link = LinkTokenInterface(linkTokenAddress);
+        require(link.transfer(receiverAccount, link.balanceOf(address(this))), "Unable to transfer");
     }
 }
