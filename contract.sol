@@ -454,7 +454,6 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
     address internal vrfCoordinator = 0x8C7382F9D8f56b33781fE506E897a4F1e2d17255;
     address internal linkTokenAddress = 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;
     uint256 internal fee;
-    uint256 public randomResult;
     address payable public receiverAccount;
     uint256 public price;
     uint256 public upgradePrice;
@@ -587,8 +586,8 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         //Take the chronological number of each pig and use it as a key to find the full token ID. This is useful for Web3 operations.
         lookupFullTokenID[totalNFTs] = tokenID;
         //Crop out six digit pieces of the returned VRF number. This in effect makes a 1 million card shoe for each card and renders modulo bias moot.
-        uint256 leftCard = (((randomNumberFromChainlink % 10 ** 22 / 10 ** 16) + 52) % 52) + 1000000;
-        uint256 rightCard = (((randomNumberFromChainlink % 10 ** 16 / 10 ** 10) + 52) % 52) + 1000000;
+        uint256 leftCard = (((randomNumberFromChainlink % 10 ** 22 / 10 ** 16) + 52) % 52) + 1;
+        uint256 rightCard = (((randomNumberFromChainlink % 10 ** 16 / 10 ** 10) + 52) % 52) + 1;
         //This saves the cards to a mapping so the lookup function can fetch the last cards dealt for display on the pig.
         lastLeftCard[tokenID] = leftCard;
         lastRightCard[tokenID] = rightCard;
