@@ -41,7 +41,7 @@ const HTMLTemplate = `<!DOCTYPE html>
 
 </html>`;
 
-const processEvent = async (event) => {
+const processMintEvent = async (event) => {
     const tokenId = event.returnValues['tokenId'];
     const filePath = getHTMLPath(tokenId);
 
@@ -53,6 +53,11 @@ const getHTMLPath = (tokenId) => {
     return path.resolve(__dirname, '..', '..', '..', 'www', 'www', 'nfts', 'pigs', `${tokenId}.html`)
 }
 
+const parseTokenId = (event) => {
+    return event.returnValues['tokenID'];
+}
+
 module.exports = {
-    processEvent
+    processMintEvent,
+    parseTokenId
 }
