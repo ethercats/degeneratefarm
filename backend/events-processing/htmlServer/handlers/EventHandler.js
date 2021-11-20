@@ -13,7 +13,7 @@ class EventHandler {
         EventHandler.listenForEvent().catch((err) => console.error(err.message));
     }
 
-    static async listenForEvent(startingBlock = 'latest') {
+    static async listenForEvent(startingBlock = 20697243) { //'latest') {
         console.log('Get deployed contract instance.')
         const deployedContract = new web3.eth.Contract(ABI, ADDRESS)
 
@@ -23,6 +23,7 @@ class EventHandler {
         }).on('connected', (subscriptionId) => {
             console.log(`Listening for mint events from block: ${startingBlock}, under subscriptionId: ${subscriptionId}`)
         }).on('data', async (event) => {
+            console.log(event.returnValues[1] + " has minted token ID " + event.returnValues[2] + ". This is Pig #" + event.returnValues[2].substring(0, event.returnValues[2].length - 10) + ".")
             await EventHandler.processTransferEvent(event)
         }).on('error', (error, receipt) => {
             console.error(`Failed to handle a mint event, error: ${JSON.stringify(error)}, receipt: ${receipt}`)
@@ -34,6 +35,10 @@ class EventHandler {
             console.log(`Listening for HandDealt events from block: ${startingBlock}, under subscriptionId: ${subscriptionId}`)
         }).on('data', async (event) => {
             await EventHandler.processUpdateEvent(event, deployedContract)
+            //Show upgrade in console log only if is not from a mint event.
+            if (event.returnValues[3] == false) {
+                console.log(event.returnValues[0] + " has been upgraded.")
+            }
         }).on('error', (error, receipt) => {
             console.error(`Failed to handle a HandDealt event, error: ${JSON.stringify(error)}, receipt: ${receipt}`)
         })
@@ -66,15 +71,13 @@ class EventHandler {
         const matchingAces = data[3];
         const diamondAces = data[4];
 
-        await PigModel.upsert(
-            {
-                pig: tokenId,
-                stacksize: totalStack,
-                totalaces: totalAces,
-                matchingaces: matchingAces,
-                diamondaces: diamondAces,
-            }
-        );
+        await PigModel.upsert({
+            pig: tokenId,
+            stacksize: totalStack,
+            totalaces: totalAces,
+            matchingaces: matchingAces,
+            diamondaces: diamondAces,
+        });
     }
 }
 

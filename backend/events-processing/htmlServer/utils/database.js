@@ -10,6 +10,7 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   port: dbConfig.PORT,
   dialect: dbConfig.dialect,
   operatorsAliases: false,
+  logging: false,
   pool: {
     max: dbConfig.pool.max,
     min: dbConfig.pool.min,

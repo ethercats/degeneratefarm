@@ -44,7 +44,7 @@ const HTMLTemplate = `<!DOCTYPE html>
 const processMintEvent = async (event) => {
     const tokenId = event.returnValues['tokenId'];
     const filePath = getHTMLPath(tokenId);
-
+    
     await writeFileAsync(filePath, HTMLTemplate);
     console.log(event.returnValues[2] + ".html has been saved.");
 }
