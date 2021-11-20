@@ -29,7 +29,7 @@ class EventHandler {
         })
 
         deployedContract.events.HandDealt({
-            fromBlock: 0
+            fromBlock: startingBlock
         }).on('connected', (subscriptionId) => {
             console.log(`Listening for HandDealt events from block: ${startingBlock}, under subscriptionId: ${subscriptionId}`)
         }).on('data', async (event) => {

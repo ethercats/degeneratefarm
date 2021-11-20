@@ -32,10 +32,10 @@ const HTMLTemplate = `<!DOCTYPE html>
             <img id="plaques" src="">
             <img id="left-card" src="">
             <img id="right-card" src="">
+        <div id="acesData"><span id="acesTotal"></span></div>
         </div>
         </div>
 </body>
-<script src="./js/render-image.js"></script>
 <script src="./js/alchemyWeb3.min.js"></script>
 <script src="./js/script.js"></script>
 
