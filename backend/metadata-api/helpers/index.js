@@ -1,42 +1,5 @@
 let pigName = ""
 
-const nftHTML = `<!DOCTYPE html>
-<html lang="en" style="height: 100%; width: 100%">
-
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
-    <link href="./css/main.css" rel="stylesheet">
-</head>
-
-<body>
-    <div class="preloader">
-        <div class="spinner"></div>
-    </div>
-    <div id="wrapper">
-        <div class="nft">
-            <img id="bg" src="">
-            <img id="tail" src="">
-            <img id="ears" src="">
-            <img id="eyes" src="">
-            <img id="body-right-hoof" src="">
-            <img id="teeth" src="">
-            <img id="tongue" src="">
-            <img id="eye-expression" src="">
-            <img id="left-hoof" src="">
-            <img id="chips" src="">
-            <img id="plaques" src="">
-            <img id="left-card" src="">
-            <img id="right-card" src="">
-        </div>
-        </div>
-</body>
-
-<script src="./js/alchemyWeb3.min.js"></script>
-<script src="./js/script.js"></script>
-
-</html>`
-
 const pig = {
     "attributes": [{
             "trait_type": "Background",
@@ -151,28 +114,28 @@ function getBodyRightHoof(n) {
             return "Cheeseburger"
         case (n == "12"):
             pigName = "Donald Oinkler"
-            return "French Fries"
+            return "Freedom Fries"
         case (n == "13"):
             pigName = "Donald Oinkler"
-            return "Cigarette"
+            return "Flag Phone"
         case (n == "14"):
             pigName = "Donald Oinkler"
-            return "Lollipop"
+            return "Modern Phone"
         case (n == "15"):
             pigName = "Donald Oinkler"
-            return "Ice Cream"
+            return "G.O.P. Phone"
         case (n == "16"):
             pigName = "Donald Oinkler"
-            return "Blueberry Muffin"
+            return "Powder Blue Phone"
         case (n == "17"):
             pigName = "Donald Oinkler"
-            return "Cookie"
+            return "Yellow Phone"
         case (n == "18"):
             pigName = "Donald Oinkler"
-            return "Cake"
+            return "One Cone,Two Scoops"
         case (n == "19"):
             pigName = "Donald Oinkler"
-            return "Bratwurst"
+            return "Cherry on Top"
             //Che Chicharrón
         case (n == "20"):
             pigName = "Che Chicharrón"
@@ -191,19 +154,19 @@ function getBodyRightHoof(n) {
             return "Black Label Cigar"
         case (n == "25"):
             pigName = "Che Chicharrón"
-            return "Baseball"
+            return "Joint"
         case (n == "26"):
             pigName = "Che Chicharrón"
-            return "Natural Bat"
+            return "Fat One"
         case (n == "27"):
             pigName = "Che Chicharrón"
-            return "Mahogany Bat"
+            return "Spliff"
         case (n == "28"):
             pigName = "Che Chicharrón"
-            return "Silver Bat"
+            return "Cigarette"
         case (n == "29"):
             pigName = "Che Chicharrón"
-            return "Gold Bat"
+            return "Machete"
             //Jamón Castro
         case (n == "30"):
             pigName = "Jamón Castro"
@@ -253,19 +216,19 @@ function getBodyRightHoof(n) {
             return "Black Label Cigar"
         case (n == "45"):
             pigName = "Augusto Cochinillo"
-            return "Baseball"
+            return "Cigarette"
         case (n == "46"):
             pigName = "Augusto Cochinillo"
-            return "Natural Bat"
+            return "Blue Helicopter"
         case (n == "47"):
             pigName = "Augusto Cochinillo"
-            return "Mahogany Bat"
+            return "Green Helicopter"
         case (n == "48"):
             pigName = "Augusto Cochinillo"
-            return "Silver Bat"
+            return "Vaporwave Helicopter"
         case (n == "49"):
             pigName = "Augusto Cochinillo"
-            return "Gold Bat"
+            return "Yellow Helicopter"
             //Hugo Oincéz
         case (n == "50"):
             pigName = "Hugo Oincéz"
@@ -284,19 +247,19 @@ function getBodyRightHoof(n) {
             return "Black Label Cigar"
         case (n == "55"):
             pigName = "Hugo Oincéz"
-            return "Baseball"
+            return "Cigarette"
         case (n == "56"):
             pigName = "Hugo Oincéz"
-            return "Natural Bat"
+            return "PSUV Gas Pump"
         case (n == "57"):
             pigName = "Hugo Oincéz"
-            return "Mahogany Bat"
+            return "Blue Gas Pump"
         case (n == "58"):
             pigName = "Hugo Oincéz"
-            return "Silver Bat"
+            return "Yellow Gas Pump"
         case (n == "59"):
             pigName = "Hugo Oincéz"
-            return "Gold Bat"
+            return "Patriotic Gas Pump"
             //Leonid Bacon
         case (n == "60"):
             pigName = "Leonid Bacon"
@@ -315,19 +278,19 @@ function getBodyRightHoof(n) {
             return "Black Label Cigar"
         case (n == "65"):
             pigName = "Leonid Bacon"
-            return "Baseball"
+            return "Cigarette"
         case (n == "66"):
             pigName = "Leonid Bacon"
-            return "Natural Bat"
+            return "Pickle"
         case (n == "67"):
             pigName = "Leonid Bacon"
-            return "Mahogany Bat"
+            return "Bratwurst"
         case (n == "68"):
             pigName = "Leonid Bacon"
-            return "Silver Bat"
+            return "Red Caviar"
         case (n == "69"):
             pigName = "Leonid Bacon"
-            return "Gold Bat"
+            return "Black Caviar"
             //Joseph Snortin
         case (n == "70"):
             pigName = "Joseph Snortin"
@@ -346,50 +309,50 @@ function getBodyRightHoof(n) {
             return "Black Label Cigar"
         case (n == "75"):
             pigName = "Joseph Snortin"
-            return "Baseball"
+            return "Cigarette"
         case (n == "76"):
             pigName = "Joseph Snortin"
-            return "Natural Bat"
+            return "Wooden Pipe"
         case (n == "77"):
             pigName = "Joseph Snortin"
-            return "Mahogany Bat"
+            return "Heptagonal Pipe"
         case (n == "78"):
             pigName = "Joseph Snortin"
-            return "Silver Bat"
+            return "Silver Pipe"
         case (n == "79"):
             pigName = "Joseph Snortin"
-            return "Gold Bat"
+            return "Dictator Pipe"
             //Queen Swill II
         case (n == "80"):
             pigName = "Queen Swill II"
-            return "Empty"
+            return "White Outfit"
         case (n == "81"):
             pigName = "Queen Swill II"
-            return "Cigar Stump"
+            return "Red Outfit"
         case (n == "82"):
             pigName = "Queen Swill II"
-            return "Red Label Cigar"
+            return "Orange Outfit"
         case (n == "83"):
             pigName = "Queen Swill II"
-            return "Unlit Cigar"
+            return "Yellow Outfit"
         case (n == "84"):
             pigName = "Queen Swill II"
-            return "Black Label Cigar"
+            return "Green Outfit"
         case (n == "85"):
             pigName = "Queen Swill II"
-            return "Baseball"
+            return "Turquoise Outfit"
         case (n == "86"):
             pigName = "Queen Swill II"
-            return "Natural Bat"
+            return "Blue Outfit"
         case (n == "87"):
             pigName = "Queen Swill II"
-            return "Mahogany Bat"
+            return "Purple Outfit"
         case (n == "88"):
             pigName = "Queen Swill II"
-            return "Silver Bat"
+            return "Magenta Outfit"
         case (n == "89"):
             pigName = "Queen Swill II"
-            return "Gold Bat"
+            return "Violet Outfit"
             //Napoleon Saveloy
         case (n == "90"):
             pigName = "Napoleon Saveloy"
@@ -408,19 +371,19 @@ function getBodyRightHoof(n) {
             return "Black Label Cigar"
         case (n == "95"):
             pigName = "Napoleon Saveloy"
-            return "Baseball"
+            return "Sword"
         case (n == "96"):
             pigName = "Napoleon Saveloy"
-            return "Natural Bat"
+            return "Cake"
         case (n == "97"):
             pigName = "Napoleon Saveloy"
-            return "Mahogany Bat"
+            return "Vanilla Macaron"
         case (n == "98"):
             pigName = "Napoleon Saveloy"
-            return "Silver Bat"
+            return "Pink Macaron"
         case (n == "99"):
             pigName = "Napoleon Saveloy"
-            return "Gold Bat"
+            return "Quill Pen"
     }
 }
 
@@ -666,7 +629,7 @@ function buildMetadata(tokenID) {
     //Set the NFT name.
     pig.name = "Pig #" + tokenID.substring(0, tokenID.length - 10)
 
-    return { pig, nftHTML };
+    return { pig };
 }
 
 function validateTokenId(event) {
