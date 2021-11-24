@@ -530,6 +530,7 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         require(msg.sender == vrfCoordinator, "Only the VRF Coordinator may call this function.");
         if (tokenToUpgrade[requestId] != 0) {
             upgradePig(tokenToUpgrade[requestId], randomNumber);
+            tokenToUpgrade[requestId] = 0;
         } else {
             mintPig(minterAddress[requestId], randomNumber);
         }
@@ -539,14 +540,12 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
     function mint() external payable nonReentrant {
         require(permanentlyStop == false, "Minting has been permanently disabled.");
         require(forSale == true, "Minting has been paused.");
-        if (msg.value == price) {
-            //If the correct amount is sent, then request a VRF number.
-            getRandomNumberForMint();
-            (bool mintPaymentSent, ) = payable(receiverAccount).call { value: msg.value }("");
-            require(mintPaymentSent, "Failed to send Ether for minting.");
-        } else {
-            revert();
-        }
+        require(msg.value == price, "Incorrect amount is specified.");
+
+        //If the correct amount is sent, then request a VRF number.
+        getRandomNumberForMint();
+        (bool mintPaymentSent, ) = payable(receiverAccount).call { value: msg.value }("");
+        require(mintPaymentSent, "Failed to send Ether for minting.");
     }
 
     //Some frontends may look for this optional ERC721 implementation.
@@ -560,7 +559,7 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
     }
 
     //This is a lookup table to make the background rarity non-linear.
-    function backgroundLookup(uint256 index) internal pure returns(uint256 backgroundNumber) {
+    function backgroundLookup(uint256 index) internal pure returns(uint256) {
         if (index <= 40) return 0;
         else if (index <= 50) return 1;
         else if (index <= 60) return 2;
@@ -570,7 +569,8 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         else if (index <= 90) return 6;
         else if (index <= 95) return 7;
         else if (index < 99) return 8;
-        else if (index == 99) return 9;
+
+        return 9;
     }
 
     //Called from fulfillRandomness.
@@ -621,14 +621,12 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
     //While the upgrade function starts here, it is the VRF Coordinator who actually mints the NFTs.
     function upgrade(uint256 tokenID) external payable {
         require(msg.sender == ownerOf(tokenID));
-        if (msg.value == upgradePrice) {
-            //If the correct amount is sent, then request a VRF number.
-            getRandomNumberForUpgrade(tokenID);
-            (bool upgradePaymentSent, ) = payable(receiverAccount).call { value: msg.value }("");
-            require(upgradePaymentSent, "Failed to send Ether for upgrade.");
-        } else {
-            revert();
-        }
+        require(msg.value == upgradePrice, "Incorrect amount is specified.");
+
+        //If the correct amount is sent, then request a VRF number.
+        getRandomNumberForUpgrade(tokenID);
+        (bool upgradePaymentSent, ) = payable(receiverAccount).call { value: msg.value }("");
+        require(upgradePaymentSent, "Failed to send Ether for upgrade.");
     }
 
     //Called from fulfillRandomness.
@@ -658,7 +656,7 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
                     }
                 }
             }
-        } else if (plaqueStack[tokenID] >= 3 && plaqueStack[tokenID] < 7) {
+        } else if (plaqueStack[tokenID] < 7) {
             if ((leftCard == 1 || leftCard == 14 || leftCard == 27 || leftCard == 40) && (rightCard == 1 || rightCard == 14 || rightCard == 27 || rightCard == 40)) {
                 totalAces[tokenID] += 1;
                 //Check if they are matching aces.
@@ -672,7 +670,7 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
                     }
                 }
             }
-        } else if (plaqueStack[tokenID] >= 7) {
+        } else {
             if ((leftCard == 1 || leftCard == 14 || leftCard == 27 || leftCard == 40) && (rightCard == 1 || rightCard == 14 || rightCard == 27 || rightCard == 40)) {
                 totalAces[tokenID] += 1;
                 //Add a plaque
@@ -751,9 +749,10 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
 
     //Calculates the total chip stack exclusive of plaques.
     function chipLookup(uint256 chips) internal pure returns(uint256) {
-        if (chips <= 100) return 1000 * chips;
-        else if (chips >= 101) return (5000 * (chips - 100)) + 100000;
-        else return 0;
+        if (chips <= 100) {
+            return 1000 * chips;
+        }
+        return (5000 * (chips - 100)) + 100000;
     }
 
     //Calculates the total plaque stack exclusive of chips.
