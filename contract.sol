@@ -530,7 +530,6 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         require(msg.sender == vrfCoordinator, "Only the VRF Coordinator may call this function.");
         if (tokenToUpgrade[requestId] != 0) {
             upgradePig(tokenToUpgrade[requestId], randomNumber);
-            tokenToUpgrade[requestId] = 0;
         } else {
             mintPig(minterAddress[requestId], randomNumber);
         }
@@ -540,7 +539,7 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
     function mint() external payable nonReentrant {
         require(permanentlyStop == false, "Minting has been permanently disabled.");
         require(forSale == true, "Minting has been paused.");
-        require(msg.value == price, "Incorrect amount is specified.");
+        require(msg.value == price, "Wrong amount for mint.");
 
         //If the correct amount is sent, then request a VRF number.
         getRandomNumberForMint();
@@ -569,7 +568,6 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         else if (index <= 90) return 6;
         else if (index <= 95) return 7;
         else if (index < 99) return 8;
-
         return 9;
     }
 
@@ -621,7 +619,7 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
     //While the upgrade function starts here, it is the VRF Coordinator who actually mints the NFTs.
     function upgrade(uint256 tokenID) external payable {
         require(msg.sender == ownerOf(tokenID));
-        require(msg.value == upgradePrice, "Incorrect amount is specified.");
+        require(msg.value == upgradePrice, "Wrong amount for upgrade.");
 
         //If the correct amount is sent, then request a VRF number.
         getRandomNumberForUpgrade(tokenID);
