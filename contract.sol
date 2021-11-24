@@ -450,9 +450,9 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
 
 contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
     address public contractOwner;
-    bytes32 internal keyHash = 0x6e75b569a01ef56d18cab6a8e71e6600d6ce853834d4a5748b720d06f878b3a4;
-    address internal vrfCoordinator = 0x8C7382F9D8f56b33781fE506E897a4F1e2d17255;
-    address internal linkTokenAddress = 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;
+    bytes32 internal keyHash = 0xf86195cf7690c55907b2b611ebb7343a6f649bff128701cc542f0569e2c549da;
+    address internal vrfCoordinator = 0x3d2341ADb2D31f1c5530cDC622016af293177AE0;
+    address internal linkTokenAddress = 0xb0897686c545045aFc77CF20eC7A532E3120E0F1;
     uint256 internal fee;
     address payable public receiverAccount;
     uint256 public price;
@@ -498,9 +498,9 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         contractOwner = msg.sender;
         receiverAccount = payable(msg.sender);
         fee = 0.0001 * 10 ** 18;
-        price = 0.0001 * 10 ** 18;
-        upgradePrice = 0.0001 * 10 ** 18;
-        baseURI = "https://wwww.degeneratefarm.io/";
+        price = 25 * 10 ** 18;
+        upgradePrice = 2 * 10 ** 18;
+        baseURI = "https://wwww.degeneratefarm.io/metadata/";
     }
 
     //Reduces require() statements that would increase verbosity.
@@ -610,7 +610,7 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         totalHandsDealt++;
         //It's also considered an upgrade since the hand and chip added goes to upgrade totals.
         upgradeCount[tokenID] += 1;
-        //We save the current state of the pig to a mapping that the NFT uses to render the real time status with a single Web3 call to the blockchain.
+        //We use this mapping to easily find the history of VRF results, such as the last five hands dealt, or when aces were hit.
         lookupTokenHistory[tokenID].push(tokenHistory(chipStack[tokenID], plaqueStack[tokenID], totalAces[tokenID], matchingAces[tokenID], diamondAces[tokenID], lastLeftCard[tokenID], lastRightCard[tokenID]));
         //isMint is true because this is a mint event.
         emit HandDealt(tokenID, leftCard, rightCard, true);
@@ -690,6 +690,7 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         totalHandsDealt++;
         //Add to the total upgrades of the pig. This can exceed the cap on chips, so we need to save for statistical purposes.
         upgradeCount[tokenID] += 1;
+        //We use this mapping to easily find the history of VRF results, such as the last five hands dealt, or when aces were hit.
         lookupTokenHistory[tokenID].push(tokenHistory(chipStack[tokenID], plaqueStack[tokenID], totalAces[tokenID], matchingAces[tokenID], diamondAces[tokenID], lastLeftCard[tokenID], lastRightCard[tokenID]));
         //isMint is false because this is an upgrade event.
         emit HandDealt(tokenID, leftCard, rightCard, false);
