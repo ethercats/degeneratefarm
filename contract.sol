@@ -519,7 +519,7 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
 
     //We need separate mappings for mints and upgrades to differentiate them in the fulfillRandomness function.
     function getRandomNumberForUpgrade(uint256 tokenID) internal returns(bytes32 requestId) {
-        require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK. Topup the contract with LINK.");
+        require(LINK.balanceOf(address(this)) >= fee, "There are no pigs left to mint, sorry. :-(");
         requestId = requestRandomness(keyHash, fee);
         tokenToUpgrade[requestId] = tokenID;
         return requestId;
