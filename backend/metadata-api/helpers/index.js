@@ -606,17 +606,22 @@ function buildMetadata(tokenID) {
     const tongue = pig.attributes[5]
     const eyeExpression = pig.attributes[6]
     const leftHoof = pig.attributes[7]
-    const rightHoof = pig.attributes[8]
+    const rightHoofAndBody = pig.attributes[8]
 
     background.value = getBackground(properties.charAt(0))
     tail.value = getTail(properties.charAt(1))
     ears.value = getEars(properties.charAt(2))
     eyeColor.value = getEyeColor(properties.charAt(3))
-    rightHoof.value = getBodyRightHoof(properties.substr(4, 2))
+    rightHoofAndBody.value = getBodyRightHoof(properties.substr(4, 2))
     teeth.value = getTeeth(properties.charAt(6))
     tongue.value = getTongue(properties.charAt(7))
     eyeExpression.value = getEyeExpression(properties.charAt(8))
     leftHoof.value = getLeftHoof(properties.charAt(9))
+
+    //Nadia suggested Donald Oinkler's soda should always be a Diet Coke. This checks for this case, and adds a trait unique to him.
+    if (leftHoof.value == "Cola" && pigName == "Donald Oinkler") {
+        leftHoof.value = "Diet Coke"
+    }
 
     //Set the description based on the pig.
     pig.description = "This " + pigName + " and its 10 visually variable traits were generated with Chainlink VRF at the time of minting. The chip stack and cards are subject to change based on upgrades. All upgrades are performed via Chainlink VRF."
