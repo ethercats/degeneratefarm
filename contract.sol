@@ -76,7 +76,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     string private _name = "DegenerateFarm.io";
 
     // Token symbol
-    string private _symbol =  "DEGEN";
+    string private _symbol =  "PIG";
     
     // Mapping from token ID to owner address
     mapping(uint256 => address) private _owners;
@@ -540,14 +540,14 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
 
     //While the mint function starts here, it is the VRF Coordinator who actually mints the NFTs.
     function mint() external payable nonReentrant {
-        require(mintRequests <= 1024, "No pigs left to mint, sorry. :-(");
         require(permanentlyStop == false, "Minting has been permanently disabled.");
         require(forSale == true, "Minting has been paused.");
+        require(mintRequests < 1024, "No pigs left to mint, sorry. :-(");
         require(msg.value == price, "Wrong amount for mint.");
-        //Limit the number of pigs minted to 1024.
-        mintRequests++;
         //If the correct amount is sent, then request a VRF number.
         getRandomNumberForMint();
+        //Limit the number of pigs minted to 1024 by tracking this variable.
+        mintRequests++;
         (bool mintPaymentSent, ) = payable(receiverAccount).call { value: msg.value }("");
         require(mintPaymentSent, "Failed to send Ether for minting.");
     }
