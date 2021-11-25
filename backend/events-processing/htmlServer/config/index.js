@@ -796,7 +796,7 @@ module.exports = {
         "type": "function"
     }
 ],
-        ADDRESS: '0x60ba9529a8C6a7a7Af2Ce44f14Dfe75505A6e0d7'
+        ADDRESS: '0x044C7c78d4179d820B18F217a594C4E366f57Bf2'
     },
     CLIENT_API_URL: process.env.ALCHEMY_URL || process.env.INFURA_URL,
 
