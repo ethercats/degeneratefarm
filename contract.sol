@@ -592,7 +592,7 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         lastRightCard[tokenID] = rightCard;
         //Initialize the chip stack with a single 1000 chip.
         chipStack[tokenID] = 1;
-        //If there first hand dealt is aces, add it to the total.
+        //If the first hand dealt is aces, add it to the total.
         if ((leftCard == 1 || leftCard == 14 || leftCard == 27 || leftCard == 40) && (rightCard == 1 || rightCard == 14 || rightCard == 27 || rightCard == 40)) {
             totalAces[tokenID] = 1;
             //Add a plaque
