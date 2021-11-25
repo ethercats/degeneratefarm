@@ -459,6 +459,7 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
     uint256 public price;
     uint256 public upgradePrice;
     uint256 internal totalNFTs;
+    uint256 internal mintRequests;
     uint256 public totalHandsDealt;
     bool public forSale;
     bool public permanentlyStop;
@@ -502,6 +503,7 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
         price = 25 * 10 ** 18;
         upgradePrice = 2 * 10 ** 18;
         baseURI = "https://wwww.degeneratefarm.io/metadata/";
+        mintRequests = 0;
     }
 
     //Reduces require() statements that would increase verbosity.
@@ -520,7 +522,7 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
 
     //We need separate mappings for mints and upgrades to differentiate them in the fulfillRandomness function.
     function getRandomNumberForUpgrade(uint256 tokenID) internal returns(bytes32 requestId) {
-        require(LINK.balanceOf(address(this)) >= fee, "There are no pigs left to mint, sorry. :-(");
+        require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK. Topup the contract with LINK.");
         requestId = requestRandomness(keyHash, fee);
         tokenToUpgrade[requestId] = tokenID;
         return requestId;
@@ -538,10 +540,12 @@ contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
 
     //While the mint function starts here, it is the VRF Coordinator who actually mints the NFTs.
     function mint() external payable nonReentrant {
+        require(mintRequests <= 1024, "No pigs left to mint, sorry. :-(");
         require(permanentlyStop == false, "Minting has been permanently disabled.");
         require(forSale == true, "Minting has been paused.");
         require(msg.value == price, "Wrong amount for mint.");
-
+        //Limit the number of pigs minted to 1024.
+        mintRequests++;
         //If the correct amount is sent, then request a VRF number.
         getRandomNumberForMint();
         (bool mintPaymentSent, ) = payable(receiverAccount).call { value: msg.value }("");
