@@ -448,6 +448,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     ) internal virtual {}
 }
 
+//How many deer does it take to build a space shuttle? -Nadia Khuzina
 contract DegeneratePigs is VRFConsumerBase, ERC721, ReentrancyGuard {
     address public contractOwner;
     bytes32 internal keyHash = 0xf86195cf7690c55907b2b611ebb7343a6f649bff128701cc542f0569e2c549da;
