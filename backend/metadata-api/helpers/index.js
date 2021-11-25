@@ -36,6 +36,10 @@ const pig = {
         {
             "trait_type": "Right Hoof",
             "value": ""
+        },
+        {
+            "trait_type": "Character",
+            "value": ""
         }
     ],
     "description": "",
@@ -607,6 +611,7 @@ function buildMetadata(tokenID) {
     const eyeExpression = pig.attributes[6]
     const leftHoof = pig.attributes[7]
     const rightHoofAndBody = pig.attributes[8]
+    const character = pig.attributes[9]
 
     background.value = getBackground(properties.charAt(0))
     tail.value = getTail(properties.charAt(1))
@@ -617,6 +622,7 @@ function buildMetadata(tokenID) {
     tongue.value = getTongue(properties.charAt(7))
     eyeExpression.value = getEyeExpression(properties.charAt(8))
     leftHoof.value = getLeftHoof(properties.charAt(9))
+    character.value = pigName
 
     //Nadia suggested Donald Oinkler's soda should always be a Diet Coke. This checks for this case, and adds a trait unique to him.
     if (leftHoof.value == "Cola" && pigName == "Donald Oinkler") {
