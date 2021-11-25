@@ -88,7 +88,7 @@ const getHTMLPath = (tokenId) => {
 }
 
 const getHTMLRenderPath = (tokenId) => {
-    return path.resolve(__dirname, '..', '..', '..', 'www', 'www', 'nfts', 'pigs', 'preview-images0', `${tokenId}.html`)
+    return path.resolve(__dirname, '..', '..', '..', 'www', 'www', 'nfts', 'pigs', 'preview-images', `${tokenId}.html`)
 }
 
 const parseTokenId = (event) => {
