@@ -630,7 +630,7 @@ function buildMetadata(tokenID) {
     }
 
     //Set the description based on the pig.
-    pig.description = "This " + pigName + " and its 10 visually variable traits were generated with Chainlink VRF at the time of minting. The chip stack and cards are subject to change based on upgrades. All upgrades are performed via Chainlink VRF."
+    pig.description = "This " + pigName + " and its 10 visually variable traits were generated with Chainlink VRF at the time of minting. The chip stack and cards are subject to change based on upgrades. All upgrades are performed via Chainlink VRF. Web3 calls for upgrades are powered by Alchemy."
     //Set the external_url.
     pig.external_url = "https://www.degeneratefarm.io"
     //Set the animation_url.
