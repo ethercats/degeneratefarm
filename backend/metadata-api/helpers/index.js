@@ -636,7 +636,8 @@ function buildMetadata(tokenID) {
     //Set the animation_url.
     pig.animation_url = "https://www.degeneratefarm.io/nfts/pigs/" + tokenID + ".html"
     //Set the image url.
-    pig.image = "https://www.degeneratefarm.io/nfts/pigs/" + getPigFileName(pigName)
+    pig.image = "https://www.degeneratefarm.io/nfts/pigs/preview-images/" + tokenID + ".png"
+    //Set the image url.
     //Set the NFT name.
     pig.name = "Pig #" + tokenID.substring(0, tokenID.length - 10)
 

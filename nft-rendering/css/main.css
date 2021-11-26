@@ -1,0 +1,173 @@
+body,
+html {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    background: #101921;
+}
+
+.preloader {
+    position: fixed;
+    top: 0;
+    background: #101921;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    display: flex;
+    justify-content: center;
+    align-content: space-around;
+    align-items: center;
+}
+
+.spinner {
+    background-image: url("../img/degenerate-farm-logo.svg");
+    background-repeat: no-repeat;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+
+}
+
+#pig-card {
+    overflow: hidden;
+    max-width: 100%;
+    margin: 8px;
+    display: flex;
+    justify-content: center;
+    align-content: space-around;
+    align-items: center;
+}
+
+
+@keyframes spin {
+    0% {
+        transform: rotate(-40deg);
+    }
+
+    25% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(40deg);
+
+    }
+
+    75% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(-40deg);
+        animation-timing-function: ease-out;
+    }
+}
+
+#acesData {
+  position: absolute;
+  display: flex;
+  justify-content: right;
+  bottom: 2px;
+}
+
+#acesTotal {
+  color: #fff;
+  font-size: 12px;
+  z-index: 15;
+  opacity: .5;
+  font-family: monospace;
+}
+
+.loaded {
+    visibility: hidden;
+}
+
+#wrapper {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-content: space-around;
+  align-items: center;
+}
+
+.nft {
+  margin: 8px;
+  display: flex;
+  justify-content: center;
+  align-content: space-around;
+  align-items: center;
+}
+
+.nft img {
+  max-height: 100%;
+}
+
+#spinner {
+  position: absolute;
+  z-index: 14;
+}
+
+#right-card {
+  position: absolute;
+  z-index: 134;
+}
+
+#left-card {
+  position: absolute;
+  z-index: 12;
+}
+
+#plaques {
+  position: absolute;
+  z-index: 11;
+}
+
+#chips {
+  position: absolute;
+  z-index: 10;
+}
+
+#left-hoof {
+  position: absolute;
+  z-index: 9;
+}
+
+#eye-expression {
+  position: absolute;
+  z-index: 8;
+}
+
+#tongue {
+  position: absolute;
+  z-index: 7;
+}
+
+#teeth {
+  position: absolute;
+  z-index: 6;
+}
+
+#body-right-hoof {
+  position: absolute;
+  z-index: 5;
+}
+
+#eyes {
+  position: absolute;
+  z-index: 4;
+}
+
+#ears {
+  position: absolute;
+  z-index: 3;
+}
+
+#tail {
+  position: absolute;
+  z-index: 2;
+}
+
+#bg {
+  position: absolute;
+  z-index: 1;
+}

@@ -1,0 +1,132 @@
+.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl {
+  padding-right: 0.25rem;
+  padding-left: 0.25rem;
+}
+
+.container {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.header-title-text {
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.5;
+  padding-bottom: 15px;
+  color: #216A65;
+}
+
+@media screen and (max-width: 499.98px) {
+  .header-title-text {
+    font-size: 18px;
+  }
+}
+
+.strategy-section {
+  position: relative;
+}
+
+.strategy-container {
+  position: relative;
+  display: flex;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.strategy-card-section {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.strategy-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.strategy-card h2 {
+  color: #00FFA3;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 3;
+}
+
+@media screen and (max-width: 576.98px) {
+  .strategy-container {
+    flex-direction: column;
+  }
+}
+
+.services-title {
+  font-weight: 800;
+  font-size: 45px;
+  line-height: 1.2;
+  color: #00FFA3;
+  margin-bottom: 20px;
+}
+
+.tcgold {
+  color: #c4aa43!important;
+}
+
+.strategy-section {
+  margin-top: -20px;
+  margin-bottom: 0px;
+}
+
+.center-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#stats {
+  margin-top: -20px;
+  margin-bottom: 0px;
+}
+
+.ltgreen {
+  color: #00FFA3!important;
+}
+
+.statsdiv {
+  margin-top: -11px;
+}
+
+#esaddr {
+  margin-top: -40px;
+  padding-bottom: 8px;
+}
+
+#osaddr {
+  margin-top: 0px;
+  padding-bottom: 60px;
+}
+
+.addrtxt {
+  margin-top: -16px;
+}
+
+.noul:hover {
+  color: #00FFA3!important;
+}
+
+@media screen and (max-width: 500px) {
+  .addrtxt {
+    font-size: 12px;
+  }
+}
+
