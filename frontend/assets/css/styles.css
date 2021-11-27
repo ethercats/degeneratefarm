@@ -78,7 +78,7 @@ table {
 }
 
 #spinner {
-  background-image: url("../../assets/img/degenerate-farm-logo.svg?h=e3d0637fbbb2fbcd6fc3f2de027a509d");
+  background-image: url("../../assets/img/degenerate-farm-logo.svg");
   background-repeat: no-repeat;
   width: 200px;
   height: 200px;
@@ -163,7 +163,7 @@ table {
   color: #00FFA3 !important;
   font-size: 20px;
   font-weight: bold;
-  background-image: url(../../assets/img/polygon-bg-lt.png?h=eaf284d32e2efc66da06e79750cf8411) !important;
+  background-image: url(../../assets/img/polygon-bg-lt.png) !important;
   background-repeat: repeat !important;
   position: top left !important;
   size: auto !important;
@@ -174,14 +174,14 @@ table {
   color: #101921 !important;
   font-size: 16px;
   font-weight: normal;
-  background-image: url(../../assets/img/bg.png?h=47117f237a372335d201bd0608e886ce) !important;
+  background-image: url(../../assets/img/bg.png) !important;
   background-repeat: repeat !important;
   position: top left !important;
   size: auto !important;
 }
 
 .accordion-button::after {
-  background-image: url(../../assets/img/arrow.svg?h=764f38ee656d6289c2b6d954cc29b538) !important;
+  background-image: url(../../assets/img/arrow.svg) !important;
 }
 
 .accordion-button:focus {
@@ -212,14 +212,14 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .bg {
-  background-image: url(../../assets/img/bg.png?h=47117f237a372335d201bd0608e886ce) !important;
+  background-image: url(../../assets/img/bg.png) !important;
   background-repeat: repeat !important;
   position: top left !important;
   size: auto !important;
 }
 
 .polygon-bg {
-  background-image: url(../../assets/img/polygon-bg.png?h=abb303be842185e08b1c8aab7c4cb226) !important;
+  background-image: url(../../assets/img/polygon-bg.png) !important;
   background-repeat: repeat !important;
   position: top left !important;
   size: auto !important;
