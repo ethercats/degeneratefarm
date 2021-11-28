@@ -20,6 +20,7 @@ Degenerate Farm turns that on its heads with the novel process of how it tracks 
 Instead of rending the NFT as an image, it takes advantage of the animation_url metadata property to render the NFT as an HTML5 app with a conglomerated group of sprites that are chosen from the JavaScript file by reading the filename (which is the token ID). The idea of making the NFT as a web app was first used by Ether Cards (which this project will be merging with after the hackathon), but with Degenerate Farm we take it further by embedding AlchemyWeb3.js into the NFT. These calls go directly to the mapping of each unique ERC721 token ID's upgrades and are rendered in real time on the NFT. Alchemy's reliability is important because without it, the NFTs will fail to display the upgrades.
 
 ## Mint Process
+![Character Traits](https://www.degeneratefarm.io/traits-and-upgrades.png)
 
 The hackathon release will feature the first animal of the project, pigs. In future releases (on Ether Cards), different animals and characters will be available for minting. The pigs are limited to 512 total NFTs. To reward DegenerateFarm.io, EtherCats.io, and Ether Cards fans, we will mint the first 16 pigs to be given away in different pre-published ways. This is necessary because in order to activate our OpenSea collection beforehand, we need to mint ourselves first. It would not be fair to hold back these low numbered pigs for ourselves later. It is easiest to to give them away.
 
