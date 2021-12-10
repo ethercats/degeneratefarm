@@ -113,7 +113,7 @@ const HBSTemplate = `<!DOCTYPE html>
             z-index: 0;
             overflow: hidden;
             max-width: 100%;
-            margin: 8px;
+            /*margin: 8px;*/
             display: flex;
             justify-content: center;
             align-content: space-around;
@@ -208,7 +208,7 @@ const getHTMLRenderPath = (tokenId) => {
 }
 
 const getImageDestinationPath = (tokenId) => {
-    return path.resolve(__dirname, '..', '..', '..', 'www', 'www', 'nfts', 'pigs', 'preview-images', `${tokenId}.png`)
+    return path.resolve(__dirname, '..', '..', '..', 'www', 'www', 'nfts', 'pigs', 'preview-images', `${tokenId}-test.png`)
 }
 
 const getImagesBasePath = () => {
