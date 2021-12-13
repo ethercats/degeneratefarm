@@ -212,7 +212,7 @@ const getImageDestinationPath = (tokenId) => {
 }
 
 const getImagesBasePath = () => {
-    return path.resolve(__dirname, '..', '..', '..', '..', 'nft-rendering', 'img');
+    return path.resolve(__dirname, '..', '..', '..', 'www', 'www', 'nfts', 'pigs', 'img');
 }
 
 const generatePreviewImage = async (tokenId) => {
