@@ -814,5 +814,16 @@ module.exports = {
             acquire: 30000,
             idle: 10000
         }
-    }
+    },
+
+    // Server configuration
+    server: {
+        host: process.env.SERVER_HOST,
+        port: process.env.SERVER_PORT,
+        username: process.env.SERVER_USERNAME,
+        password: process.env.SERVER_PASSWORD,
+        destinationPath: process.env.SERVER_DEST_IMG_PATH
+    },
+
+    ASSET_BASE_PATH: process.env.ASSET_BASE_PATH
 };

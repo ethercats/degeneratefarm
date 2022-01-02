@@ -17,6 +17,7 @@
     "hbs": "^4.2.0",
     "mysql2": "^2.3.3",
     "node-html-to-image": "^3.2.0",
+    "node-scp": "^0.0.16",
     "sequelize": "^6.11.0"
   }
 }

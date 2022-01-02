@@ -4,6 +4,9 @@ const { promisify } = require('util');
 const nodeHtmlToImage = require('node-html-to-image');
 const Handlebars = require('handlebars');
 
+const { ASSET_BASE_PATH } = require('../config');
+const { uploadImage } = require('./imageUploader');
+
 const writeFileAsync = promisify(writeFile);
 const readFileAsync = promisify(readFile);
 
@@ -196,23 +199,24 @@ const processMintEvent = async (event) => {
     await writeFileAsync(filePathRender, HTMLTemplateRender);
     console.log(event.returnValues[2] + ".html has been saved.");
 
-    await generatePreviewImage(tokenId);
+    const imagePath = await generatePreviewImage(tokenId);
+    await uploadImage(imagePath);
 }
 
 const getHTMLPath = (tokenId) => {
-    return path.resolve(__dirname, '..', '..', '..', 'www', 'www', 'nfts', 'pigs', `${tokenId}.html`)
+    return path.resolve(ASSET_BASE_PATH, `${tokenId}.html`);
 }
 
 const getHTMLRenderPath = (tokenId) => {
-    return path.resolve(__dirname, '..', '..', '..', 'www', 'www', 'nfts', 'pigs', 'preview-images', `${tokenId}.html`)
+    return path.resolve(ASSET_BASE_PATH, 'preview-images', `${tokenId}.html`);
 }
 
 const getImageDestinationPath = (tokenId) => {
-    return path.resolve(__dirname, '..', '..', '..', 'www', 'www', 'nfts', 'pigs', 'preview-images', `${tokenId}-test.png`)
+    return path.resolve(ASSET_BASE_PATH, 'preview-images', `${tokenId}-test.png`);
 }
 
 const getImagesBasePath = () => {
-    return path.resolve(__dirname, '..', '..', '..', 'www', 'www', 'nfts', 'pigs', 'img');
+    return path.resolve(ASSET_BASE_PATH, 'img');
 }
 
 const generatePreviewImage = async (tokenId) => {
@@ -221,11 +225,14 @@ const generatePreviewImage = async (tokenId) => {
     const params = await getImageParams(tokenId);
     const finalTemplate = template(params);
 
+    const destImagePath = getImageDestinationPath(tokenId);
     await nodeHtmlToImage({
-        output: getImageDestinationPath(tokenId),
+        output: destImagePath,
         html: finalTemplate
     });
     console.log(`${tokenId}.png has been saved.`);
+
+    return destImagePath;
 }
 
 const getImageParams = async (tokenId) => {
@@ -267,3 +274,10 @@ module.exports = {
     processMintEvent,
     parseTokenId
 }
+
+// const test = async (tokenId) => {
+//     const imagePath = await generatePreviewImage(tokenId);
+//     await uploadImage(imagePath);
+// }
+//
+// test('870328568142').catch(err => console.error(err));
