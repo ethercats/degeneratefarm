@@ -1,5 +1,6 @@
 const web3 = require('../utils/web3');
 const PigModel = require('../models/pig.model');
+const ProcessedBlockModel = require('../models/processed-block.model');
 const { processMintEvent, parseTokenId } = require('../utils/parser');
 const {
     contract: {
@@ -13,15 +14,17 @@ class EventHandler {
         EventHandler.listenForEvent().catch((err) => console.error(err.message));
     }
 
-    static async listenForEvent(startingBlock = 20697243) { //'latest') {
+    static async listenForEvent() {
         console.log('Get deployed contract instance.')
         const deployedContract = new web3.eth.Contract(ABI, ADDRESS)
 
+        const { blockNumber } = await ProcessedBlockModel.getBlockNumber();
+
         deployedContract.events.Transfer({
             filter: { from: 0 }, //Mints are all transfer events, but coming from the blackhole address (from: 0)
-            fromBlock: startingBlock
+            fromBlock: blockNumber
         }).on('connected', (subscriptionId) => {
-            console.log(`Listening for mint events from block: ${startingBlock}, under subscriptionId: ${subscriptionId}`)
+            console.log(`Listening for mint events from block: ${blockNumber}, under subscriptionId: ${subscriptionId}`)
         }).on('data', async (event) => {
             console.log(event.returnValues[1] + " has minted token ID " + event.returnValues[2] + ". This is Pig #" + event.returnValues[2].substring(0, event.returnValues[2].length - 10) + ".")
             await EventHandler.processTransferEvent(event)
@@ -30,9 +33,9 @@ class EventHandler {
         })
 
         deployedContract.events.HandDealt({
-            fromBlock: startingBlock
+            fromBlock: blockNumber
         }).on('connected', (subscriptionId) => {
-            console.log(`Listening for HandDealt events from block: ${startingBlock}, under subscriptionId: ${subscriptionId}`)
+            console.log(`Listening for HandDealt events from block: ${blockNumber}, under subscriptionId: ${subscriptionId}`)
         }).on('data', async (event) => {
             await EventHandler.processUpdateEvent(event, deployedContract)
             //Show upgrade in console log only if is not from a mint event.

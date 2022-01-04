@@ -2,11 +2,12 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "Steps for backend:",
-  "main": "htmlServer/handlers/EventHandler.js",
+  "main": "src/handlers/EventHandler.js",
   "scripts": {
-    "run-local": "node -r dotenv/config htmlServer/server.js dotenv_config_path=.env.local",
-    "run-testnet": "node -r dotenv/config htmlServer/server.js dotenv_config_path=.env.testnet",
-    "run-mainnet": "node -r dotenv/config htmlServer/server.js dotenv_config_path=.env.mainnet"
+    "run-local": "node -r dotenv/config src/server.js dotenv_config_path=.env.local",
+    "run-testnet": "node -r dotenv/config src/server.js dotenv_config_path=.env.testnet",
+    "run-mainnet": "node -r dotenv/config src/server.js dotenv_config_path=.env.mainnet",
+    "generate-images": "node -r dotenv/config src/scripts/generateImages.js dotenv_config_path=.env.mainnet"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +16,7 @@
     "dotenv": "^10.0.0",
     "handlebars": "^4.7.7",
     "hbs": "^4.2.0",
+    "lodash": "^4.17.21",
     "mysql2": "^2.3.3",
     "node-html-to-image": "^3.2.0",
     "node-scp": "^0.0.16",
